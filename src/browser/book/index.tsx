@@ -56,8 +56,7 @@ const Component: FunctionComponent = () => {
         <Sight name={data?.name ?? ""} />
       </div>
       <div className={styles.canvas}>
-        <Canvas />
-        {/*TODO writeの時にcanvas重ねるかcanvasの設定変えるか*/}
+        <Canvas write={mode === "write"} />
       </div>
       <div className={styles.action}>
         <Action mode={mode} setMode={setMode} getLocation={getLocation} />
