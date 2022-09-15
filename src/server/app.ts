@@ -3,7 +3,7 @@ import { join, resolve } from "path";
 
 const router = Router();
 
-const browserPath = resolve("./browser");
+const browserPath = resolve("./dist/browser");
 const getPage = (name: string) => {
   const targetPath = join(browserPath, `${name}.html`);
   return targetPath;
