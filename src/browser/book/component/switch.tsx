@@ -15,10 +15,12 @@ const Component: FunctionComponent<Props> = (props) => {
 
   return (
     <div>
-        <button onClick={() => setBook("limited")}>公開モード</button>
-        <button onClick={() => setBook("unlimited")} disabled={!limitBreak}>限定モード</button>
+      <button onClick={() => setBook("limited")}>公開モード</button>
+      <button onClick={() => setBook("unlimited")} disabled={!limitBreak}>
+        限定モード
+      </button>
     </div>
-    );
+  );
 };
 
 export default Component;

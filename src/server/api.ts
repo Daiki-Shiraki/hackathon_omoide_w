@@ -1,4 +1,4 @@
-import { getSearchResults } from './../browser/home/script/api';
+import { getSearchResults } from "./../browser/home/script/api";
 import { json, Router } from "express";
 import { checkPosition } from "./checkPos";
 import {
@@ -65,7 +65,7 @@ router.post("/unlimited/sent", async (req, res) => {
   await storeUnlimitedBook(id, canvas);
 });
 // wordで検索した結果を取得（完全一致のみ）
-router.get("/book-search", async(req, res) => {
+router.get("/book-search", async (req, res) => {
   const word = String(req.query["word"]);
   console.log(word);
   const data = await getSearchResult(word);

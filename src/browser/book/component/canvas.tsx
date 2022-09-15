@@ -36,9 +36,8 @@ const Component: FunctionComponent<Props> = (props) => {
   const books = props.books;
 
   // const [dataURI, setDataURI] = useState<string>(books![0]!.canvas); // DBから受け取った画像を格納
-  const [dataURI, setDataURI] = useState<string>( books?.[0]?.canvas || Image3); // DBから受け取った画像を格納
+  const [dataURI, setDataURI] = useState<string>(books?.[0]?.canvas || Image3); // DBから受け取った画像を格納
   const [supportTouch, setSupportTouch] = useState<boolean>(false);
-
 
   //それ以前のキャンバス読み込み
   //デバイスの大きさ取得
@@ -72,7 +71,7 @@ const Component: FunctionComponent<Props> = (props) => {
   };
 
   React.useEffect(() => {
-    const supportTouch = 'ontouchend' in document;
+    const supportTouch = "ontouchend" in document;
     setSupportTouch(supportTouch);
     const width = document.documentElement.clientWidth * scale;
     const height = document.documentElement.clientHeight * 0.8 * scale;
@@ -90,8 +89,8 @@ const Component: FunctionComponent<Props> = (props) => {
   const DrawingLine = (clientX: number, clientY: number) => {
     const canvas: any = canvasRef.current;
     const rect: IRect = canvas.getBoundingClientRect();
-    const x = (clientX - rect.left);
-    const y = (clientY - rect.top );
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
     console.log("left,top=", rect.left, rect.top);
     Draw(~~(x * scale), ~~(y * scale));
   };
@@ -146,7 +145,7 @@ const Component: FunctionComponent<Props> = (props) => {
     const touchY = e.touches[0]?.clientY;
     if (!touchX || !touchY) return;
     DrawingLine(touchX, touchY);
-    console.log("ontouch",);
+    console.log("ontouch");
   };
 
   //Touchで差分により描画
@@ -178,11 +177,10 @@ const Component: FunctionComponent<Props> = (props) => {
     <div className={styles.canvas}>
       <canvas
         id="canvas"
-        onMouseDown ={(e) => !supportTouch && write && OnClick(e)}
+        onMouseDown={(e) => !supportTouch && write && OnClick(e)}
         onMouseMove={(e) => !supportTouch && write && OnMove(e)}
         onMouseUp={(e) => !supportTouch && write && DrawEnd(e)}
         onMouseOut={(e) => !supportTouch && write && DrawEnd(e)}
-
         onTouchStart={(e) => write && OnTouch(e)}
         onTouchMove={(e) => write && OnSwipe(e)}
         onTouchEnd={(e) => write && SwipeEnd(e)}

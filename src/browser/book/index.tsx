@@ -26,7 +26,7 @@ const getParams = (urlParamStr: string) => {
 const Component: FunctionComponent = () => {
   const params = getParams(window.location.search) as { id: string };
   const [data, setData] = useState<initData>();
-  const [mode, setMode] = useState<bookMode>("write");//TODO default "read"
+  const [mode, setMode] = useState<bookMode>("write"); //TODO default "read"
   const [book, setBook] = useState<bookType>("unlimited");
 
   const getLocation = () => {
@@ -62,10 +62,23 @@ const Component: FunctionComponent = () => {
         <Switch limitBreak={!!data?.limitBreak} setBook={setBook} />
       </div>
       <div className={styles.canvas}>
-        <Canvas write={mode === "write"} limit={book} books={(book === "unlimited" ? data?.unlimitedBookData : data?.limitedBookData) ?? undefined} />
+        <Canvas
+          write={mode === "write"}
+          limit={book}
+          books={
+            (book === "unlimited"
+              ? data?.unlimitedBookData
+              : data?.limitedBookData) ?? undefined
+          }
+        />
       </div>
       <div className={styles.action}>
-        <Action mode={mode} setMode={setMode} getLocation={getLocation} limitBreak={!!data?.limitBreak} />
+        <Action
+          mode={mode}
+          setMode={setMode}
+          getLocation={getLocation}
+          limitBreak={!!data?.limitBreak}
+        />
       </div>
     </div>
   );

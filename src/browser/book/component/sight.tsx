@@ -10,9 +10,7 @@ const Component: FunctionComponent<Props> = (props) => {
 
   return (
     <div className={styles.sight}>
-      <div className={styles.name}>
-        {name}
-      </div>
+      <div className={styles.name}>{name}</div>
     </div>
   );
 };
