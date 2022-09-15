@@ -1,5 +1,4 @@
 import type { bookData, sightData } from "@/types/database";
-// 必要（？）
 import * as mysql from "promise-mysql";
 
 // idから公開Bookを持ってくる
@@ -11,9 +10,8 @@ export async function getLimitedBook(id: number) {
     password: "adminadmin",
     database: "omoidew",
   });
-  console.log(`SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id}`);
   const result = connection.query(
-    `SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id}`
+    `SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id};`
   );
   connection.end();
   console.log(await result);
@@ -31,7 +29,7 @@ export async function getUnlimitedBook(id: number) {
   });
 
   const result = connection.query(
-    `SELECT * FROM book WHERE is_gentei = 0 and sight_ID = ${id}`
+    `SELECT * FROM book WHERE is_gentei = 0 and sight_ID = ${id};`
   );
   connection.end();
 
@@ -48,7 +46,7 @@ export async function getSight(id: Number) {
     database: "omoidew",
   });
   console.log(id);
-  const result = connection.query(`SELECT * FROM sight WHERE id = ${id}`);
+  const result = connection.query(`SELECT * FROM sight WHERE id = ${id};`);
   connection.end();
 
   return result as Promise<sightData[]>;
@@ -63,10 +61,7 @@ export async function getRecentUnlimitedBook(num: Number) {
     password: "adminadmin",
     database: "omoidew",
   });
-  console.log(
-    `SELECT * FROM book WHERE is_gentei = 1 ORDER BY edit_date LIMIT ${num}`
-  );
-  const result = connection.query(`SELECT * FROM book WHERE is_gentei = 1`);
+  const result = connection.query(`SELECT * FROM book WHERE is_gentei = 0 ORDER BY edit_date LIMIT ${num};`);
 
   connection.end();
 
@@ -76,6 +71,7 @@ export async function getRecentUnlimitedBook(num: Number) {
 // 検索の際に使う
 // 文字列を送るとそれに合った検索結果が返ってくる
 export async function getSearchResult(words: string) {
+  console.log(words);
   const connection = await mysql.createConnection({
     host: "omoide-rds-v2.cn5rx6avsd8j.ap-northeast-1.rds.amazonaws.com",
     port: 3306,
@@ -85,17 +81,15 @@ export async function getSearchResult(words: string) {
   });
 
   const result = connection.query(
-    `SELECT * FROM sight WHERE name LIKE \"` + words + `\"`
+    `SELECT * FROM book WHERE is_gentei = 0 and name LIKE \"` + words + `\"`
   );
+  console.log(`SELECT * FROM book WHERE is_gentei = 0 and name LIKE BINARY \"%` + words + `%\";`);
   connection.end();
 
   return result;
 }
 
 // 受け取った画像をデータベースに保存する
-// idで本を選択
-// flagで0, 1
-//
 export async function storeLimitedBook(id: number, canvas: string) {
   const connection = await mysql.createConnection({
     host: "omoide-rds-v2.cn5rx6avsd8j.ap-northeast-1.rds.amazonaws.com",
@@ -105,7 +99,7 @@ export async function storeLimitedBook(id: number, canvas: string) {
     database: "omoidew",
   });
   const result = connection.query(
-    `UPDATE book SET canvas = ${canvas} WHERE is_gentei = 1 and sight_ID = ${id} `
+    `UPDATE book SET canvas = \"${canvas}\" WHERE is_gentei = 1 and sight_ID = ${id}; `
   );
   connection.end();
 
@@ -113,9 +107,6 @@ export async function storeLimitedBook(id: number, canvas: string) {
 }
 
 // 受け取った画像をデータベースに保存する
-// idで本を選択
-// flagで0, 1
-//
 export async function storeUnlimitedBook(id: number, canvas: string) {
   const connection = await mysql.createConnection({
     host: "omoide-rds-v2.cn5rx6avsd8j.ap-northeast-1.rds.amazonaws.com",
@@ -125,9 +116,7 @@ export async function storeUnlimitedBook(id: number, canvas: string) {
     multipleStatements: true,
   });
   const result = connection.query(
-    "UPDATE book SET canvas =" +
-      canvas +
-      `WHERE is_gentei = 0 and sight_ID = ${id}`
+    `UPDATE book SET canvas = \"${canvas}\" WHERE is_gentei = 0 and sight_ID = ${id}; `
   );
   connection.end();
 

@@ -34,7 +34,7 @@ export async function checkPosition(
   } else {
     const limitBreak = 0;
     const limitedBookData = null;
-    const unlimitedBookData = await getLimitedBook(id);
+    const unlimitedBookData = await getUnlimitedBook(id);
     return {
       sightName,
       limitBreak,
