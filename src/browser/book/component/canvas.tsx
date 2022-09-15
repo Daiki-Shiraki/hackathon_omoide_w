@@ -1,8 +1,14 @@
 import { FunctionComponent, useState } from "react";
+import type { bookType } from "@/types/book";
+import type { bookData } from "@/types/database";
 import React, { useRef } from "react";
 import Image1 from "../../images/image1.png";
+import Image3 from "../../images/image3.png";
 
 import styles from "../css/canvas.module.css";
+import { postImg } from "../script/api";
+
+const scale = 1 / 4;
 
 //大きさ取得
 // interface IProps {
@@ -21,10 +27,18 @@ interface IRect {
 
 type Props = {
   write: boolean;
+  limit: bookType;
+  books: bookData[] | undefined;
 };
 const Component: FunctionComponent<Props> = (props) => {
   const write = props.write;
-  const [dataURI, setDataURI] = useState<string>(Image1); // DBから受け取った画像を格納
+  const limit = props.limit;
+  const books = props.books;
+
+  // const [dataURI, setDataURI] = useState<string>(books![0]!.canvas); // DBから受け取った画像を格納
+  const [dataURI, setDataURI] = useState<string>( books?.[0]?.canvas || Image3); // DBから受け取った画像を格納
+  const [supportTouch, setSupportTouch] = useState<boolean>(false);
+
 
   //それ以前のキャンバス読み込み
   //デバイスの大きさ取得
@@ -58,8 +72,10 @@ const Component: FunctionComponent<Props> = (props) => {
   };
 
   React.useEffect(() => {
-    const width = document.documentElement.clientWidth;
-    const height = document.documentElement.clientHeight * 0.8;
+    const supportTouch = 'ontouchend' in document;
+    setSupportTouch(supportTouch);
+    const width = document.documentElement.clientWidth * scale;
+    const height = document.documentElement.clientHeight * 0.8 * scale;
     setSize([width, height]);
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     if (!canvas) return;
@@ -71,33 +87,38 @@ const Component: FunctionComponent<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //描画開始
+  const DrawingLine = (clientX: number, clientY: number) => {
+    const canvas: any = canvasRef.current;
+    const rect: IRect = canvas.getBoundingClientRect();
+    const x = (clientX - rect.left);
+    const y = (clientY - rect.top );
+    console.log("left,top=", rect.left, rect.top);
+    Draw(~~(x * scale), ~~(y * scale));
+  };
+
+  //Mouseで描画開始
   const OnClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (e.button !== 0) {
       return;
     }
-    const canvas: any = canvasRef.current;
-    const rect: IRect = canvas.getBoundingClientRect();
-    const x = ~~(e.clientX - rect.left);
-    const y = ~~(e.clientY - rect.top);
-    Draw(x, y);
+    DrawingLine(e.clientX, e.clientY);
+    console.log("onclick");
   };
 
-  //差分により描画
+  //Mouseで差分により描画
   const OnMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (e.buttons !== 1) {
       return;
     }
-    const canvas: any = canvasRef.current;
-    const rect: IRect = canvas.getBoundingClientRect();
-    const x = ~~(e.clientX - rect.left);
-    const y = ~~(e.clientY - rect.top);
-    Draw(x, y);
+    DrawingLine(e.clientX, e.clientY);
+    console.log("onMove");
   };
 
+  // 描画終了
   const DrawEnd = (_: React.MouseEvent<HTMLCanvasElement>) => {
     mouseX = null;
     mouseY = null;
+    console.log("DrawEnd");
   };
 
   const Draw = (x: number, y: number) => {
@@ -111,16 +132,43 @@ const Component: FunctionComponent<Props> = (props) => {
     }
     ctx.lineTo(x, y);
     ctx.lineCap = "round";
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = "#000000";
     ctx.stroke();
     mouseX = x;
     mouseY = y;
+    console.log("Draw");
+  };
+
+  //Touchで描画開始
+  const OnTouch = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const touchX = e.touches[0]?.clientX;
+    const touchY = e.touches[0]?.clientY;
+    if (!touchX || !touchY) return;
+    DrawingLine(touchX, touchY);
+    console.log("ontouch",);
+  };
+
+  //Touchで差分により描画
+  const OnSwipe = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const touchX = e.touches[0]?.clientX;
+    const touchY = e.touches[0]?.clientY;
+    if (!touchX || !touchY) return;
+    DrawingLine(touchX, touchY);
+    console.log("onMove");
+  };
+
+  //描画終了
+  const SwipeEnd = (_: React.TouchEvent<HTMLCanvasElement>) => {
+    mouseX = null;
+    mouseY = null;
+    console.log("SwipeEnd");
   };
 
   const Memory = () => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const tmp = canvas.toDataURL();
+    postImg(tmp, limit);
     setDataURI(tmp);
     console.log("save", tmp);
   };
@@ -130,10 +178,14 @@ const Component: FunctionComponent<Props> = (props) => {
     <div className={styles.canvas}>
       <canvas
         id="canvas"
-        onMouseDown={(e) => write && OnClick(e)}
-        onMouseMove={(e) => write && OnMove(e)}
-        onMouseUp={(e) => write && DrawEnd(e)}
-        onMouseOut={(e) => write && DrawEnd(e)}
+        onMouseDown ={(e) => !supportTouch && write && OnClick(e)}
+        onMouseMove={(e) => !supportTouch && write && OnMove(e)}
+        onMouseUp={(e) => !supportTouch && write && DrawEnd(e)}
+        onMouseOut={(e) => !supportTouch && write && DrawEnd(e)}
+
+        onTouchStart={(e) => write && OnTouch(e)}
+        onTouchMove={(e) => write && OnSwipe(e)}
+        onTouchEnd={(e) => write && SwipeEnd(e)}
         ref={canvasRef}
       />
       {write && (
