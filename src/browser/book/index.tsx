@@ -1,3 +1,4 @@
+import { bookData, bookMode } from "@/types/book";
 import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import Action from "./component/action";
@@ -21,31 +22,45 @@ const getParams = (urlParamStr: string) => {
 
 const Component: FunctionComponent = () => {
   const params = getParams(window.location.search) as { id: string };
-  const [data, setData] = useState();
-  useEffect(() => {
+  const [data, setData] = useState<bookData>();
+  const [mode, setMode] = useState<bookMode>("read");
+
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      alert("位置情報が取得できませんでした");
+      return;
+    }
     const id = params.id;
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      console.log(position);
-      const coords = position.coords;
-      const data = await getData(id, {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
-      setData(data);
-    });
-  }, [params.id]);
-  console.log(data);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const coords = position.coords;
+        const data = await getData(id, {
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+        setData(data);
+        console.log(data);
+      },
+      () => {
+        alert("位置情報が取得できませんでした");
+      }
+    );
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(getLocation, []);
 
   return (
     <div className={styles.container}>
-      <div>
-        <Sight />
+      <div className={styles.sight}>
+        <Sight name={data?.name ?? ""} />
       </div>
-      <div>
+      <div className={styles.canvas}>
         <Canvas />
+        {/*TODO writeの時にcanvas重ねるかcanvasの設定変えるか*/}
       </div>
-      <div>
-        <Action />
+      <div className={styles.action}>
+        <Action mode={mode} setMode={setMode} getLocation={getLocation} />
       </div>
     </div>
   );

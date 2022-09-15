@@ -1,0 +1,35 @@
+.even {
+  width: 100%;
+  background-color: rgb(250, 250, 250);
+}
+.odd {
+  width: 100%;
+  background-color: rgb(200, 200, 200);
+}
+
+.card {
+  position: relative;
+  margin: 5% 10%;
+  width: 80%;
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ulb {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 50px;
+  padding: 5% 0;
+}
