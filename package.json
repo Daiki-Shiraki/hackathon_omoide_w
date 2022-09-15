@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node dist/server/index.js",
     "build": "webpack",
-    "clean": "del-cli bundle-analyzer browser server",
+    "clean": "del-cli bundle-analyzer dist",
     "dev": "run-p dev:*",
     "dev:tsc": "tsc -b src/browser src/server -w --preserveWatchOutput",
     "dev:webpack": "cross-env WEBPACK_WATCH=true webpack",

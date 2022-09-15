@@ -30,7 +30,7 @@ const makeBrowserConfig = (name: string): webpack.Configuration => {
   return merge(base, {
     entry,
     output: {
-      path: path.resolve(__dirname, name),
+      path: path.resolve(__dirname, `dist/${name}`),
       filename: "assets/[name].js",
       publicPath: "",
     },
@@ -112,7 +112,7 @@ const extensionConfig = merge(base, {
   node: false,
   entry: path.resolve(__dirname, "src/server/index.ts"),
   output: {
-    path: path.resolve(__dirname, "server"),
+    path: path.resolve(__dirname, "dist/server"),
     filename: "index.js",
     libraryTarget: "commonjs2",
   },
