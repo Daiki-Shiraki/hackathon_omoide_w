@@ -3,8 +3,4 @@ export type location = {
   longitude: number;
 };
 
-export type bookData = {
-  name: string;
-};
-
 export type bookMode = "read" | "write";

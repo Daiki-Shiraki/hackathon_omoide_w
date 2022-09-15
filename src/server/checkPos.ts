@@ -10,36 +10,38 @@ export async function checkPosition(
   gotLongitude: number
 ) {
   // 対象のSightを取得
-  const sightData = await getSight(id); // 一意に定まる
-  const sightName = sightData[0].name;
+  const sightDataArray = await getSight(id || 0); // 一意に定まる
+  if (!sightDataArray.length) return;
+  const sightData = sightDataArray[0]!;
+  const sightName = sightData.name;
   // 辞書の中から位置情報のみを取得
-  const RealLatitude = sightData[0].latitude;
-  const RealLongitude = sightData[0].longitude;
+  const RealLatitude = sightData.latitude;
+  const RealLongitude = sightData.longitude;
 
   // 距離を算出
   const dist = distance(gotLatitude, gotLongitude, RealLatitude, RealLongitude);
-  // console.log(dist);
-  let limitedBookData, unlimitedBookData;
-  let limitBreak = 0;
   // 位置情報で場合分け
   if (dist < threshold) {
-    limitBreak = 1;
-    limitedBookData = await getLimitedBook(id);
-    unlimitedBookData = await getUnlimitedBook(id);
+    const limitBreak = 1;
+    const limitedBookData = await getLimitedBook(id);
+    const unlimitedBookData = await getUnlimitedBook(id);
+    return {
+      sightName,
+      limitBreak,
+      unlimitedBookData,
+      limitedBookData,
+    };
   } else {
-    limitBreak = 0;
-    limitedBookData = null;
-    unlimitedBookData = await getLimitedBook(id);
+    const limitBreak = 0;
+    const limitedBookData = null;
+    const unlimitedBookData = await getLimitedBook(id);
+    return {
+      sightName,
+      limitBreak,
+      unlimitedBookData,
+      limitedBookData,
+    };
   }
-  // 取得データと場合分け結果を返す
-  const data = {
-    sightName,
-    limitBreak,
-    unlimitedBookData,
-    limitedBookData,
-  };
-  
-  return data;
 }
 // 二地点の緯度経度を入力すると距離をkmで返す
 function distance(lat1: number, lng1: number, lat2: number, lng2: number) {

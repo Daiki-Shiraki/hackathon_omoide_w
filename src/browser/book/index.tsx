@@ -1,4 +1,5 @@
-import { bookData, bookMode } from "@/types/book";
+import type { bookMode } from "@/types/book";
+import type { initData } from "@/types/database";
 import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import Action from "./component/action";
@@ -17,12 +18,13 @@ const getParams = (urlParamStr: string) => {
       [temp[0]]: temp[1],
     };
   }, {});
+  console.log(params);
   return params;
 };
 
 const Component: FunctionComponent = () => {
   const params = getParams(window.location.search) as { id: string };
-  const [data, setData] = useState<bookData>();
+  const [data, setData] = useState<initData>();
   const [mode, setMode] = useState<bookMode>("read");
 
   const getLocation = () => {
@@ -39,7 +41,6 @@ const Component: FunctionComponent = () => {
           longitude: coords.longitude,
         });
         setData(data);
-        console.log(data);
       },
       () => {
         alert("位置情報が取得できませんでした");
@@ -53,7 +54,7 @@ const Component: FunctionComponent = () => {
   return (
     <div className={styles.container}>
       <div className={styles.sight}>
-        <Sight name={data?.name ?? ""} />
+        <Sight name={data?.sightName ?? ""} />
       </div>
       <div className={styles.canvas}>
         <Canvas write={mode === "write"} />

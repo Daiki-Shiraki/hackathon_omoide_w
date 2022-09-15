@@ -1,3 +1,4 @@
+import type { bookData, sightData } from "@/types/database";
 // 必要（？）
 import * as mysql from "promise-mysql";
 
@@ -11,10 +12,12 @@ export async function getLimitedBook(id: number) {
     database: "omoidew",
   });
   console.log(`SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id}`);
-  const result = connection.query(`SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id}`);
+  const result = connection.query(
+    `SELECT * FROM book WHERE is_gentei = 1 and sight_ID = ${id}`
+  );
   connection.end();
   console.log(await result);
-  return result;
+  return result as Promise<bookData[]>;
 }
 
 // idから限定Bookを持ってくる
@@ -27,10 +30,12 @@ export async function getUnlimitedBook(id: number) {
     database: "omoidew",
   });
 
-  const result = connection.query(`SELECT * FROM book WHERE is_gentei = 0 and sight_ID = ${id}`);
+  const result = connection.query(
+    `SELECT * FROM book WHERE is_gentei = 0 and sight_ID = ${id}`
+  );
   connection.end();
 
-  return result;
+  return result as Promise<bookData[]>;
 }
 
 // idからSightを持ってくる
@@ -46,7 +51,7 @@ export async function getSight(id: Number) {
   const result = connection.query(`SELECT * FROM sight WHERE id = ${id}`);
   connection.end();
 
-  return result;
+  return result as Promise<sightData[]>;
 }
 
 // 公開本の内容を更新された順に直近"num"冊持ってくる
@@ -59,7 +64,8 @@ export async function getRecentUnlimitedBook(num: Number) {
     database: "omoidew",
   });
   console.log(
-    `SELECT * FROM book WHERE is_gentei = 1 ORDER BY edit_date LIMIT ${num}`);
+    `SELECT * FROM book WHERE is_gentei = 1 ORDER BY edit_date LIMIT ${num}`
+  );
   const result = connection.query(`SELECT * FROM book WHERE is_gentei = 1`);
 
   connection.end();
@@ -78,7 +84,9 @@ export async function getSearchResult(words: string) {
     database: "omoidew",
   });
 
-  const result = connection.query(`SELECT * FROM sight WHERE name LIKE \"` + words + `\"`);
+  const result = connection.query(
+    `SELECT * FROM sight WHERE name LIKE \"` + words + `\"`
+  );
   connection.end();
 
   return result;
@@ -96,7 +104,9 @@ export async function storeLimitedBook(id: number, canvas: string) {
     password: "adminadmin",
     database: "omoidew",
   });
-  const result = connection.query(`UPDATE book SET canvas = ${canvas} WHERE is_gentei = 1 and sight_ID = ${id} `);
+  const result = connection.query(
+    `UPDATE book SET canvas = ${canvas} WHERE is_gentei = 1 and sight_ID = ${id} `
+  );
   connection.end();
 
   return result;
