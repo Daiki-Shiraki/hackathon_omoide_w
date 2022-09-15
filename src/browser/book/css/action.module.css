@@ -13,6 +13,8 @@
 .mode button {
   width: 100%;
   height: 100%;
+  font-size: 50px;
+  background-color: var(--pink-color);
 }
 
 .location {
@@ -23,4 +25,6 @@
 .location button {
   width: 100%;
   height: 100%;
+  font-size: 40px;
+  background-color: #d5c0ca;
 }
