@@ -13,7 +13,7 @@ export type bookData = {
   edit_date: string;
 };
 
-type initData = {
+export type initData = {
   sightName: string;
   limitBreak: 0 | 1;
   unlimitedBookData: bookData[] | null;

@@ -1,10 +1,11 @@
-import type { bookMode } from "@/types/book";
+import type { bookMode, bookType } from "@/types/book";
 import type { initData } from "@/types/database";
 import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import Action from "./component/action";
 import Canvas from "./component/canvas";
 import Sight from "./component/sight";
+import Switch from "./component/switch";
 
 import styles from "./css/style.module.css";
 import { getData } from "./script/api";
@@ -25,7 +26,8 @@ const getParams = (urlParamStr: string) => {
 const Component: FunctionComponent = () => {
   const params = getParams(window.location.search) as { id: string };
   const [data, setData] = useState<initData>();
-  const [mode, setMode] = useState<bookMode>("read");
+  const [mode, setMode] = useState<bookMode>("write");//TODO default "read"
+  const [book, setBook] = useState<bookType>("unlimited");
 
   const getLocation = () => {
     if (!navigator.geolocation) {
@@ -56,11 +58,14 @@ const Component: FunctionComponent = () => {
       <div className={styles.sight}>
         <Sight name={data?.sightName ?? ""} />
       </div>
+      <div>
+        <Switch limitBreak={!!data?.limitBreak} setBook={setBook} />
+      </div>
       <div className={styles.canvas}>
-        <Canvas write={mode === "write"} />
+        <Canvas write={mode === "write"} limit={book} books={(book === "unlimited" ? data?.unlimitedBookData : data?.limitedBookData) ?? undefined} />
       </div>
       <div className={styles.action}>
-        <Action mode={mode} setMode={setMode} getLocation={getLocation} />
+        <Action mode={mode} setMode={setMode} getLocation={getLocation} limitBreak={!!data?.limitBreak} />
       </div>
     </div>
   );
