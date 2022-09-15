@@ -1,0 +1,26 @@
+.action {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.mode {
+  width: 100%;
+  height: 100%;
+}
+
+.mode button {
+  width: 100%;
+  height: 100%;
+}
+
+.location {
+  width: 100%;
+  height: 100%;
+}
+
+.location button {
+  width: 100%;
+  height: 100%;
+}

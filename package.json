@@ -17,7 +17,8 @@
     "test:types": "tsc -b src/browser src/server"
   },
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "promise-mysql": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
