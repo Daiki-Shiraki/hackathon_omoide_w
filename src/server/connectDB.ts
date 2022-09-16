@@ -61,7 +61,9 @@ export async function getRecentUnlimitedBook(num: Number) {
     password: "adminadmin",
     database: "omoidew",
   });
-  const result = connection.query(`SELECT * FROM book WHERE is_gentei = 0 ORDER BY edit_date LIMIT ${num};`);
+  const result = connection.query(
+    `SELECT * FROM book WHERE is_gentei = 0 ORDER BY edit_date LIMIT ${num};`
+  );
 
   connection.end();
 
@@ -83,7 +85,11 @@ export async function getSearchResult(words: string) {
   const result = connection.query(
     `SELECT * FROM book WHERE is_gentei = 0 and name LIKE \"` + words + `\"`
   );
-  console.log(`SELECT * FROM book WHERE is_gentei = 0 and name LIKE BINARY \"%` + words + `%\";`);
+  console.log(
+    `SELECT * FROM book WHERE is_gentei = 0 and name LIKE BINARY \"%` +
+      words +
+      `%\";`
+  );
   connection.end();
 
   return result;

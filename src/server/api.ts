@@ -1,4 +1,4 @@
-import { getSearchResults } from './../browser/home/script/api';
+import { getSearchResults } from "./../browser/home/script/api";
 import { json, Router } from "express";
 import { checkPosition } from "./checkPos";
 import {
@@ -45,7 +45,7 @@ router.get("/limited/get/:id", async (req, res) => {
 });
 
 // idとCanvasを渡して限定本を保存
-router.post("/limited/sent/:id", async (req, res) => {
+router.post("/limited/sent", async (req, res) => {
   const id = Number(req.body.id);
   const canvas = String(req.body.img);
   await storeLimitedBook(id, canvas);
@@ -63,16 +63,17 @@ router.post("/unlimited/sent", async (req, res) => {
   const id = Number(req.body.id);
   const canvas = String(req.body.img);
   await storeUnlimitedBook(id, canvas);
+  console.log("send");
 });
 // wordで検索した結果を取得（完全一致のみ）
-router.get("/book-search", async(req, res) => {
+router.get("/book-search", async (req, res) => {
   const word = String(req.query["word"]);
   console.log(word);
   const data = await getSearchResult(word);
   res.send(JSON.stringify(data));
 });
 
-router.get("/resent", async (req, res) => {
+router.get("/recent", async (req, res) => {
   const num = Number(req.query["num"]);
   console.log("-------------" + num);
   const data = await getRecentUnlimitedBook(num);

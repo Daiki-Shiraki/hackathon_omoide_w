@@ -7,7 +7,7 @@ type Props = {
   mode: bookMode;
   setMode: Function;
   getLocation: Function;
-  limitBreak: boolean
+  limitBreak: boolean;
 };
 const Component: FunctionComponent<Props> = (props) => {
   const mode = props.mode;
@@ -18,8 +18,10 @@ const Component: FunctionComponent<Props> = (props) => {
   return (
     <div className={styles.action}>
       <div className={styles.mode}>
-        {mode === "read" && ( //TODO 範囲外ならdisable
-          <button onClick={() => setMode("write")} disabled={!limitBreak}>書き込み</button>
+        {mode === "read" && (
+          <button onClick={() => setMode("write")} disabled={!limitBreak}>
+            書き込み
+          </button>
         )}
         {mode === "write" && (
           <button onClick={() => setMode("read")}>閲覧に戻る</button>

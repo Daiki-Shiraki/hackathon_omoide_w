@@ -2,7 +2,7 @@ import { getLimitedBook, getUnlimitedBook, getSight } from "./connectDB";
 
 const R = Math.PI / 180;
 
-const threshold = 10; // 閾値は10km
+const threshold = 2500; // 閾値は10km
 
 export async function checkPosition(
   id: number,

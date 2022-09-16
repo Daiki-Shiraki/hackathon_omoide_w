@@ -1,0 +1,9 @@
+.switch {
+  width: 100%;
+}
+
+.switch button {
+  width: 50%;
+  height: 50px;
+  font-size: 40px;
+}

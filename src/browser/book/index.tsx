@@ -25,27 +25,35 @@ const getParams = (urlParamStr: string) => {
 
 const Component: FunctionComponent = () => {
   const params = getParams(window.location.search) as { id: string };
+  const id = params.id;
+  const [position, setPosition] = useState<[number, number]>([0, 0]);
+
   const [data, setData] = useState<initData>();
-  const [mode, setMode] = useState<bookMode>("write");//TODO default "read"
+  const [mode, setMode] = useState<bookMode>("read"); //TODO default "read"
   const [book, setBook] = useState<bookType>("unlimited");
+
+  const adaptData = async (pos: [number, number] = position) => {
+    const data = await getData(id, {
+      latitude: pos[0],
+      longitude: pos[1],
+    });
+    setData(data);
+  }
 
   const getLocation = () => {
     if (!navigator.geolocation) {
       alert("位置情報が取得できませんでした");
       return;
     }
-    const id = params.id;
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const coords = position.coords;
-        const data = await getData(id, {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
-        setData(data);
+        setPosition([coords.latitude, coords.longitude]);
+        await adaptData([coords.latitude, coords.longitude]);
       },
       () => {
         alert("位置情報が取得できませんでした");
+        //setPosition([0, 0]);
       }
     );
   };
@@ -62,10 +70,21 @@ const Component: FunctionComponent = () => {
         <Switch limitBreak={!!data?.limitBreak} setBook={setBook} />
       </div>
       <div className={styles.canvas}>
-        <Canvas write={mode === "write"} limit={book} books={(book === "unlimited" ? data?.unlimitedBookData : data?.limitedBookData) ?? undefined} />
+        <Canvas key={data?.sightName}
+          write={mode === "write"}
+          limit={book}
+          data={data}
+          id={params.id}
+          adaptData={adaptData}
+        />
       </div>
       <div className={styles.action}>
-        <Action mode={mode} setMode={setMode} getLocation={getLocation} limitBreak={!!data?.limitBreak} />
+        <Action
+          mode={mode}
+          setMode={setMode}
+          getLocation={getLocation}
+          limitBreak={!!data?.limitBreak}
+        />
       </div>
     </div>
   );

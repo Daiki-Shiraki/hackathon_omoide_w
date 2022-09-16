@@ -10,7 +10,11 @@ const Component: FunctionComponent<Props> = (props) => {
 
   return (
     <div className={styles.search}>
-      <input onChange={(e) => setSearch(e.target.value ?? "")} type="text" placeholder="名称で検索" />
+      <input
+        onChange={(e) => setSearch(e.target.value ?? "")}
+        type="text"
+        placeholder="名称で検索"
+      />
     </div>
   );
 };
