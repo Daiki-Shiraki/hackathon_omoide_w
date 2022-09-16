@@ -72,7 +72,7 @@ router.get("/book-search", async (req, res) => {
   res.send(JSON.stringify(data));
 });
 
-router.get("/resent", async (req, res) => {
+router.get("/recent", async (req, res) => {
   const num = Number(req.query["num"]);
   console.log("-------------" + num);
   const data = await getRecentUnlimitedBook(num);
