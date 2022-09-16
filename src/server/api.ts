@@ -45,7 +45,7 @@ router.get("/limited/get/:id", async (req, res) => {
 });
 
 // idとCanvasを渡して限定本を保存
-router.post("/limited/sent/:id", async (req, res) => {
+router.post("/limited/sent", async (req, res) => {
   const id = Number(req.body.id);
   const canvas = String(req.body.img);
   await storeLimitedBook(id, canvas);

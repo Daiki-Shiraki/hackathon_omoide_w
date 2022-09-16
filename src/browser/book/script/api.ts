@@ -17,7 +17,7 @@ export const postImg = async (img: string, limit: bookType) => {
     id: 1,
     img,
   };
-  await fetch(`./api/${limit}`, {
+  await fetch(`./api/${limit}/sent`, {
     method: "post",
     body: JSON.stringify(data),
     headers,
