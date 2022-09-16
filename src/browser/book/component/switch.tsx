@@ -1,7 +1,7 @@
 //import { bookType } from "@/types/book";
 import type { FunctionComponent } from "react";
 
-//import styles from "../css/name.module.css";
+import styles from "../css/switch.module.css";
 
 type Props = {
   //type: bookType;
@@ -14,9 +14,9 @@ const Component: FunctionComponent<Props> = (props) => {
   const setBook = props.setBook;
 
   return (
-    <div>
-      <button onClick={() => setBook("limited")}>公開モード</button>
-      <button onClick={() => setBook("unlimited")} disabled={!limitBreak}>
+    <div className={styles.switch}>
+      <button onClick={() => setBook("unlimited")}>公開モード</button>
+      <button onClick={() => setBook("limited")} disabled={!limitBreak}>
         限定モード
       </button>
     </div>

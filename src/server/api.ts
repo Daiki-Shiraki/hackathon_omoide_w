@@ -63,6 +63,7 @@ router.post("/unlimited/sent", async (req, res) => {
   const id = Number(req.body.id);
   const canvas = String(req.body.img);
   await storeUnlimitedBook(id, canvas);
+  console.log("send");
 });
 // wordで検索した結果を取得（完全一致のみ）
 router.get("/book-search", async (req, res) => {

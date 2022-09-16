@@ -18,7 +18,7 @@ const Component: FunctionComponent<Props> = (props) => {
   return (
     <div className={styles.action}>
       <div className={styles.mode}>
-        {mode === "read" && ( //TODO 範囲外ならdisable
+        {mode === "read" && (
           <button onClick={() => setMode("write")} disabled={!limitBreak}>
             書き込み
           </button>
