@@ -38,7 +38,7 @@ const Component: FunctionComponent = () => {
       longitude: pos[1],
     });
     setData(data);
-  }
+  };
 
   const getLocation = () => {
     if (!navigator.geolocation) {
@@ -70,7 +70,8 @@ const Component: FunctionComponent = () => {
         <Switch limitBreak={!!data?.limitBreak} setBook={setBook} />
       </div>
       <div className={styles.canvas}>
-        <Canvas key={data?.sightName}
+        <Canvas
+          key={data?.sightName}
           write={mode === "write"}
           limit={book}
           data={data}

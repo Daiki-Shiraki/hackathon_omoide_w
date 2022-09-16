@@ -9,7 +9,7 @@ export const getData = async (id: string, location: location) => {
 };
 
 export const postImg = async (img: string, limit: bookType, id: string) => {
-  console.log("post")
+  console.log("post");
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -23,5 +23,5 @@ export const postImg = async (img: string, limit: bookType, id: string) => {
     body: JSON.stringify(data),
     headers,
   });
-  console.log("save", limit)
+  console.log("save", limit);
 };

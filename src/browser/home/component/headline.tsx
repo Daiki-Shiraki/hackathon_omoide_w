@@ -19,7 +19,7 @@ const Component: FunctionComponent<Props> = (props) => {
         const data = await getSearchResults(param);
         if (!ignore) setData(data);
       } else {
-        const data = await getRecent();
+        const data = await getRecent(3);
         if (!ignore) setData(data);
       }
       return () => {

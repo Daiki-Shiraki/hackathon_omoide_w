@@ -40,7 +40,9 @@ const Component: FunctionComponent<Props> = (props) => {
   const adaptData = props.adaptData;
 
   // const [dataURI, setDataURI] = useState<string>(books![0]!.canvas); // DBから受け取った画像を格納
-  const [dataURI, setDataURI] = useState<string>(data?.unlimitedBookData?.[0]?.canvas || Image3); // DBから受け取った画像を格納
+  const [dataURI, setDataURI] = useState<string>(
+    data?.unlimitedBookData?.[0]?.canvas || Image3
+  ); // DBから受け取った画像を格納
   const [supportTouch, setSupportTouch] = useState<boolean>(false);
 
   //それ以前のキャンバス読み込み
@@ -77,11 +79,14 @@ const Component: FunctionComponent<Props> = (props) => {
   };
 
   React.useEffect(() => {
-    const uri = (limit === "limited" ? data?.unlimitedBookData?.[0]?.canvas : data?.limitedBookData?.[0]?.canvas) || Image3;
-    console.log("読み込み", limit)
-    setDataURI(uri)
-    reset(dataURI)
-  }, [limit])
+    const uri =
+      (limit === "limited"
+        ? data?.unlimitedBookData?.[0]?.canvas
+        : data?.limitedBookData?.[0]?.canvas) || Image3;
+    console.log("読み込み", limit);
+    setDataURI(uri);
+    reset(dataURI);
+  }, [limit]);
 
   React.useEffect(() => {
     const supportTouch = "ontouchend" in document;
