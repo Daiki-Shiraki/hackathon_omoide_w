@@ -1,4 +1,4 @@
-import { headlineData } from "@/types/home";
+import { bookData } from "@/types/database";
 import { FunctionComponent, useEffect, useState } from "react";
 import { getRecent, getSearchResults } from "../script/api";
 import Card from "./card";
@@ -10,7 +10,7 @@ type Props = {
 };
 const Component: FunctionComponent<Props> = (props) => {
   const param = props.param;
-  const [data, setData] = useState<headlineData[]>();
+  const [data, setData] = useState<bookData[]>();
 
   useEffect(() => {
     (async () => {
@@ -32,7 +32,7 @@ const Component: FunctionComponent<Props> = (props) => {
     <div className={styles.headline}>
       {data &&
         data.map((d, i) => {
-          return <Card data={d} odd={!!(i % 2)} />;
+          return <Card key={d.id} data={d} odd={!!(i % 2)} />;
         })}
     </div>
   );

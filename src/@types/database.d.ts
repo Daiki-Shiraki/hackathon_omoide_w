@@ -11,6 +11,7 @@ export type bookData = {
   canvas: string;
   is_gentei: 0 | 1;
   edit_date: string;
+  name: string;
 };
 
 export type initData = {
